@@ -1,3 +1,5 @@
+
+
 export async function sendMessageToAI(prompt, imageFile, audioFile, onChunk, onDone) {
     const res = await fetch("http://localhost:8080/api/v1/chat", {
         method: "POST",

@@ -1,12 +1,42 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Call Center AI Chat UI
 
-Currently, two official plugins are available:
+Bu proje, çağrı merkezi uygulamaları için yapay zeka destekli bir sohbet arayüzü sunar. React ve Vite ile geliştirilmiştir. Kullanıcılar metin, resim ve sesli mesaj göndererek AI ile etkileşime geçebilir.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Özellikler
+- Gerçek zamanlı AI sohbeti
+- Metin, resim ve sesli mesaj desteği
+- Mesaj geçmişi ve yerel depolama
+- Modern ve kullanıcı dostu arayüz
 
-## Expanding the ESLint configuration
+## Kurulum
+1. Depoyu klonlayın:
+	```sh
+	git clone https://github.com/Cevrimicii/CallCenterFrontEnd.git
+	```
+2. Gerekli bağımlılıkları yükleyin:
+	```sh
+	cd ai-chat-ui
+	npm install
+	```
+3. Geliştirme sunucusunu başlatın:
+	```sh
+	npm run dev
+	```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Kullanım
+- Arayüzde mesajınızı yazın ve gönderin.
+- Resim eklemek için dosya seçin.
+- Sesli mesaj göndermek için mikrofon simgesini kullanın.
+- AI yanıtlarını anlık olarak görüntüleyin.
+
+## API
+Arka uç API varsayılan olarak `http://localhost:8080/api/v1/chat` adresine istek gönderir. Sesli mesajlar için `http://localhost:8080/transcribe` endpointi kullanılır.
+
+## Yapılandırma
+- Vite ve React SWC plugin ile hızlı geliştirme ortamı.
+- ESLint ile kod kalitesi kontrolü.
+
+
+## Lisans
+MIT

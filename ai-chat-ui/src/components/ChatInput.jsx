@@ -1,5 +1,24 @@
 import React, { useState, useRef } from "react";
 
+async function transcribeAudioWithWhisperBackend(audioBlob) {
+    const formData = new FormData();
+    formData.append("audio_data", audioBlob, "audio.webm");
+    const response = await fetch("http://localhost:8080/transcribe", {
+        method: "POST",
+        body: formData
+    });
+    if (!response.ok) {
+        let errorMsg = "Whisper backend hatası";
+        try {
+            const err = await response.json();
+            if (err && err.error) errorMsg = err.error;
+        } catch { }
+        throw new Error(errorMsg);
+    }
+    const data = await response.json();
+    return data.text;
+}
+
 export default function ChatInput({ onSend, disabled }) {
     const [value, setValue] = useState("");
     const [imageFile, setImageFile] = useState(null);
@@ -24,6 +43,7 @@ export default function ChatInput({ onSend, disabled }) {
         setImagePreview(null);
     };
 
+
     // Ses kaydı başlat
     const startRecording = async () => {
         try {
@@ -38,10 +58,14 @@ export default function ChatInput({ onSend, disabled }) {
                 }
             };
 
-            mediaRecorder.onstop = () => {
+            mediaRecorder.onstop = async () => {
                 const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
-                // Mesaj gönder (text boş, sadece ses var)
-                onSend({ text: "", image: imageFile, audio: audioBlob });
+                try {
+                    const text = await transcribeAudioWithWhisperBackend(audioBlob);
+                    setValue(text); // Metni inputa yaz
+                } catch (err) {
+                    alert("Ses metne çevrilemedi: " + err.message);
+                }
                 clearImage();
             };
 
@@ -62,11 +86,19 @@ export default function ChatInput({ onSend, disabled }) {
 
     // Normal gönderme (metin / resim)
     const submit = (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (!value.trim() && !imageFile) return;
         onSend({ text: value, image: imageFile });
         setValue("");
         clearImage();
+    };
+
+    // Enter ile gönderme
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            submit();
+        }
     };
 
     return (
@@ -76,6 +108,7 @@ export default function ChatInput({ onSend, disabled }) {
                 placeholder="Mesajınızı yazın veya mikrofonla ses kaydedin..."
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
+                onKeyDown={handleKeyDown}
                 rows={1}
                 disabled={disabled}
             />

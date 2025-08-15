@@ -117,7 +117,7 @@ export default function Chat() {
             </div>
 
             <div className="chat-window">
-                <div className="flex-1 p-4 overflow-y-auto">
+                <div className="messages-scroll">
                     {messages.map((m) => (
                         <Message
                             key={m.id}
